@@ -9,7 +9,7 @@ import { httpError } from './utils.mjs';
 import { emptyTrash, getArchivedNotes } from './controllers/note-controllers.mjs';
 
 // Hardcoded configuration values
-const appPort = 4000; 
+const appPort = process.env.PORT || 4000; 
 const corsAllowOrigins = ['http://localhost:5173', 'https://notes-virid-five-54.vercel.app']; 
 const payloadLimit = '1mb'; 
 
