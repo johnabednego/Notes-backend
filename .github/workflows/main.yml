@@ -15,7 +15,9 @@ jobs:
           uses: actions/checkout@v2
         # ... other steps ...
         - name: Run Application
-          run: npm start
+          run: |
+            npm install
+            npm start
           env:
             MONGODB_URL: ${{ secrets.MONGODB_URL }}
   
