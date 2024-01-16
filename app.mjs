@@ -14,7 +14,9 @@ const corsAllowOrigins = ['http://localhost:5173', 'https://notes-virid-five-54.
 const payloadLimit = '1mb'; 
 
 // MongoDB Atlas connection string
-const dbUrl = 'mongodb+srv://abednego:abednego@cluster0.yn9ml.mongodb.net/NotesDB?retryWrites=true&w=majority'; 
+//For security reasons, I am setting the dbUrl as a github secret variable
+// const dbUrl = 'mongodb+srv://<username>:<password>@cluster0.yn9ml.mongodb.net/NotesDB?retryWrites=true&w=majority'; 
+const dbUrl = process.env.MONGODB_URL;
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
