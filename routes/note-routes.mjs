@@ -12,5 +12,7 @@ router
   .delete('/:noteId',  noteControllers.deleteNote)
   .patch('/:noteId/restore', noteControllers.restoreNote)
   .patch('/:noteId/trash',  noteControllers.trashNote)
+  .patch('/:noteId/archive',noteControllers.archiveNote)
+  .patch('/:noteId/unarchive',noteControllers.unarchiveNote)
 
 export default router;

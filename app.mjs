@@ -6,11 +6,11 @@ import mongoSanitize from 'express-mongo-sanitize';
 import cors from 'cors';
 import noteRoutes from './routes/note-routes.mjs';
 import { httpError } from './utils.mjs';
-import { emptyTrash } from './controllers/note-controllers.mjs';
+import { emptyTrash, getArchivedNotes } from './controllers/note-controllers.mjs';
 
 // Hardcoded configuration values
 const appPort = 4000; 
-const corsAllowOrigins = ['http://localhost:3000']; 
+const corsAllowOrigins = ['http://localhost:5173', 'https://notes-virid-five-54.vercel.app']; 
 const payloadLimit = '1mb'; 
 
 // MongoDB Atlas connection string
@@ -46,6 +46,18 @@ app.post('/api/v1/empty-trash', async (req, res, next) => {
   try {
     // Call the emptyTrash controller function
     await emptyTrash(req, res, next);
+   
+  } catch (err) {
+    // Handle any errors and pass them to the error handling middleware
+    next(err);
+  }
+});
+
+// Define a route that handles 
+app.get('/api/v1/archived', async (req, res, next) => {
+  try {
+    // Call the emptyTrash controller function
+    await getArchivedNotes(req, res, next);
    
   } catch (err) {
     // Handle any errors and pass them to the error handling middleware

@@ -180,3 +180,72 @@ export async function emptyTrash(req, res, next) {
     return next(httpError(500, 'internal_error', '', err));
   }
 }
+
+
+export async function getArchivedNotes(req, res, next) {
+  try {
+    const limit = Number(req.query.limit);
+    const page = Number(req.query.page);
+    const skip = limit * (page - 1);
+
+    const query = {
+      isArchived: true,
+      isTrashed: false,
+    };
+
+    // get all archived user notes from db
+    const notes = await NoteModel.find(query).sort('-archivedAt').skip(skip).limit(limit);
+    const totalNotes = await NoteModel.countDocuments(query);
+
+    // respond with notes
+    res.json({ totalNotes, notes });
+  } catch (err) {
+    return next(httpError(500, 'internal_error', '', err));
+  }
+}
+
+export async function archiveNote(req, res, next) {
+  try {
+    const { noteId } = req.params;
+
+    // Find and update the note to be trashed
+    const note = await NoteModel.findByIdAndUpdate(
+      new ObjectId(noteId),
+      {
+        isArchived: true,
+        archivedAt: Date.now(),
+      },
+      { new: true }
+    );
+
+    if (!note)
+      return next(httpError(422, "note_not_found", "Note does not exist"));
+
+    res.json({ note });
+  } catch (err) {
+    return next(httpError(500, "internal_error", "", err));
+  }
+}
+
+export async function unarchiveNote(req, res, next) {
+  try {
+    const { noteId } = req.params;
+
+    // Find and update the note to restore it
+    const note = await NoteModel.findByIdAndUpdate(
+      new ObjectId(noteId),
+      {
+        isArchived: false,
+        archivedAt: null,
+      },
+      { new: true }
+    );
+
+    if (!note)
+      return next(httpError(422, "note_not_found", "Note does not exist"));
+
+    res.json({ note });
+  } catch (err) {
+    return next(httpError(500, "internal_error", "", err));
+  }
+}
